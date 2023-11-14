@@ -1,6 +1,9 @@
 # python/app/main.py
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI
+from api import routers
 from mangum import Mangum
+from api.user.router import router as user_router
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="Notice Project",
@@ -9,13 +12,22 @@ app = FastAPI(
     root_path="/v1",
 )
 
-api_router = APIRouter(prefix="/api")
+# api_router = APIRouter(prefix="/api")
 
 
 @app.get("/")
 async def root():
     return {"code": 200, "message": "Hello World", "data": None}
 
-app.include_router(api_router)
+for router, kwargs in routers:
+    app.include_router(router=router, **kwargs)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 handler = Mangum(app)
