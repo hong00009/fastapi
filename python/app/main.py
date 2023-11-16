@@ -1,5 +1,5 @@
 # python/app/main.py
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from api import routers
 from mangum import Mangum
 from api.user.router import router as user_router
@@ -9,7 +9,7 @@ app = FastAPI(
     title="Notice Project",
     description="Notice Project",
     version="0.1.0",
-    root_path="/v1",
+    root_path="",
 )
 
 # api_router = APIRouter(prefix="/api")
